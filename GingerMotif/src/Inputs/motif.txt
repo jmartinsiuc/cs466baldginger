@@ -1,0 +1,2 @@
+>D:\motif.txt
+MOTIF1 12 **CAGGCCTGGC
