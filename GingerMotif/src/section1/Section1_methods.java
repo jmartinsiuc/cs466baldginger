@@ -29,10 +29,10 @@ public class Section1_methods {
 		}
 		
 		//change to another location later
-		writeFile("sequences.fa", sequenceList);
-		writeFile2("D:\\sites.txt", positionList);
-		writeMotif("D:\\motif.txt");
-		writeMotiflength("D:\\motiftlength.txt");
+		writeFile("./src/inputs/sequences.fa", sequenceList);
+		writeFile2("./src/inputs/sites.txt", positionList);
+		writeMotif("./src/inputs/motif.txt");
+		writeMotiflength("./src/inputs/motiftlength.txt");
 			
 	}
 	
