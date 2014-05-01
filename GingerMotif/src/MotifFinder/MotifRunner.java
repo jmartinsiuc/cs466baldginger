@@ -17,9 +17,9 @@ public class MotifRunner {
 		section2_methods s2;
 		String addString;
 		overStart = System.nanoTime();
-		for(int i=0; i<3; i++){
-			for(int j=0; j<3; j++){
-				for(int k=0; k<3; k++){
+		for(int i=0; i<rangeNM.length; i++){
+			for(int j=0; j<rangeML.length; j++){
+				for(int k=0; k<rangeSC.length; k++){
 					addString = rangeNM[i]+"_"+rangeML[j]+"_"+rangeSC[k]+"_";
 					System.out.println("round: " +addString);
 					//int ml, int nm, int sl, int sc
