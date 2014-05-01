@@ -6,24 +6,26 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.PriorityQueue;
+import section2.Alignment;
 
 
 public class section2_methods {
 	int beamWidth = 20;
 	ArrayList<char[]> sequenceList = new ArrayList<char[]>();
 	Comparator<alignedStrings> comparator = new matchComparator();
-    FixedSizePriorityQueue<alignedStrings> alignQueue;
+    PriorityQueue<alignedStrings> alignQueue;
     ArrayList<int[]> sitesArrs = new ArrayList<int[]>();
 	ArrayList<int[][]> profileArrs = new ArrayList<int[][]>();
-	ArrayList<alignedStrings> aList;
+	ArrayList<alignedStrings> aList = new ArrayList<alignedStrings>();
 	int motifLength;
 
 
-	public void section2_methods(int bWidth){
+	public section2_methods(int bWidth){
 		beamWidth = bWidth;
-		alignQueue = new FixedSizePriorityQueue<alignedStrings>(beamWidth, comparator);
-		getSequences("./src/inputs/motiftlength.txt");
-		getML("./src/inputs/sequences.fa"); 
+		alignQueue = new PriorityQueue<alignedStrings>(beamWidth + 1, comparator);
+		getSequences("./src/Inputs/sequences.fa");
+		getML("./src/Inputs/motiflength.txt"); 
 		for(int i=0;i<sequenceList.size();i++){
 			profileArrs.add(new int[motifLength][4]);
 			sitesArrs.add(new int[sequenceList.size()]);
@@ -34,7 +36,7 @@ public class section2_methods {
 		int best = getBestProfile();
 		
 		writeMotif("./src/Outputs/predictedmotif.txt",best);
-		writeSitesList("./src/OutPuts/predictedsites.txt",best);
+		writeSitesList("./src/Outputs/predictedsites.txt",best);
 	}
 	
 	/**
@@ -44,14 +46,21 @@ public class section2_methods {
 	 * @param cs2 - the second string
 	 */
 	private void genBestAlignment(char[] cs, char[] cs2) {
-		int gappenalty=0;
-		Alignment aligner = new Alignment(cs,cs2, "matrixfilename",gappenalty, motifLength);
+		Alignment aligner = new Alignment(cs,cs2, motifLength);
 		for(int i=0; i<cs.length-motifLength;i++){
 			for(int j=0; j<cs2.length-motifLength;j++){
 				alignQueue.add(new alignedStrings(i,j, aligner.genScore(i,j)));
+				if (alignQueue.size() > beamWidth)
+					alignQueue.poll();
 			}
 		}
-		aList = (ArrayList<alignedStrings>) alignQueue.asList();
+		for(int i=0;i<beamWidth;i++){
+			aList.add(alignQueue.poll());
+			/*System.out.println("at index " + i+ ":");
+			System.out.println("aloc:" + aList.get(i).aloc);
+			System.out.println("bloc:" + aList.get(i).bloc);
+			System.out.println("score:" + aList.get(i).matchValue);*/
+		}
 	}
 	
 	/**
@@ -66,7 +75,6 @@ public class section2_methods {
 			sites[1]=aList.get(i).bloc;
 			addScores(i, sequenceList.get(0), sites[0]);
 			addScores(i, sequenceList.get(1), sites[1]);
-			
 		}
 	}
 	
@@ -108,7 +116,8 @@ public class section2_methods {
 			scores[i] = genScore(seq, i, profileIndex);
 			if(scores[i]>scores[maxLoc]) maxLoc=i;
 		}
-		addScores(maxLoc, seq, profileIndex);
+		sitesArrs.get(profileIndex)[index] = maxLoc;
+		addScores(profileIndex, seq, maxLoc);
 	}
 
 	/**
@@ -126,7 +135,8 @@ public class section2_methods {
 			id=getPlace(seq[loc+i]);
 			ltotal = profile[i][0] + profile[i][1] + 
 						profile[i][2] + profile[i][3];
-			score += (double)profile[i][id]/(double)ltotal;
+			score += ((double)profile[i][id]*(double)profile[i][id])
+						/(double)(ltotal*ltotal);
 		}
 		return score;
 	}
@@ -145,7 +155,6 @@ public class section2_methods {
 				maxLoc=i;
 			}
 		}
-		
 		return maxLoc;
 	}
 	
@@ -277,16 +286,8 @@ public class section2_methods {
 	 */
 	private class matchComparator implements Comparator<alignedStrings>	{
 	    @Override
-	    public int compare(alignedStrings x, alignedStrings y)
-	    {
-	        // Assume neither string is null. Real code should
-	        // probably be more robust
-	        if (x.matchValue < y.matchValue) return -1;
-	        if (x.matchValue > y.matchValue) return 1;
-	        return 0;
+	    public int compare(alignedStrings x, alignedStrings y){
+	        return  x.matchValue > y.matchValue ? 1:-1;
 	    }
 	}
-	
-	/**/
-	
 }

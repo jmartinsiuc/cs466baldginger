@@ -32,7 +32,7 @@ public class Section1_methods {
 		writeFile("./src/Inputs/sequences.fa", sequenceList);
 		writeFile2("./src/Inputs/sites.txt", positionList);
 		writeMotif("./src/Inputs/motif.txt");
-		writeMotiflength("./src/Inputs/motiftlength.txt");
+		writeMotiflength("./src/Inputs/motiflength.txt");
 			
 	}
 	

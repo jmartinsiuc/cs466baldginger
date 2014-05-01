@@ -1,6 +1,6 @@
 package section2;
 
-import section1.Section1_methods;
+import section2.section2_methods;
 
 public class Main {
 
