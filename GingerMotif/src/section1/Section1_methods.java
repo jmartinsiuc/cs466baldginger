@@ -11,7 +11,7 @@ public class Section1_methods {
 	ArrayList<Integer>positionList = new ArrayList<Integer>();
 	ArrayList<char[]>bindingSites = new ArrayList<char[]>();
 
-	public Section1_methods(int ml, int nm, int sl, int sc) {
+	public Section1_methods(int ml, int nm, int sl, int sc, String addString) {
 		for(int i=0;i<sc; i++){
 			sequenceList.add(genSequences(sl));			
 		}
@@ -29,11 +29,10 @@ public class Section1_methods {
 		}
 		
 		//change to another location later
-		writeFile("./src/Inputs/sequences.fa", sequenceList);
-		writeFile2("./src/Inputs/sites.txt", positionList);
-		writeMotif("./src/Inputs/motif.txt");
-		writeMotiflength("./src/Inputs/motiflength.txt");
-			
+		writeFile("./src/Inputs/"+addString+"sequences.fa", sequenceList);
+		writeFile2("./src/Inputs/"+addString+"sites.txt", positionList);
+		writeMotif("./src/Inputs/"+addString+"motif.txt");
+		writeMotiflength("./src/Inputs/"+addString+"motiflength.txt");
 	}
 	
 	private void plantSite(int x){
@@ -140,7 +139,7 @@ public class Section1_methods {
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(fileName);
-			
+			pw.println(">"+fileName);
 			pw.println(motif.length);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

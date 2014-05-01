@@ -21,12 +21,12 @@ public class section2_methods {
 	int motifLength;
 
 
-	public section2_methods(int bWidth){
+	public section2_methods(int bWidth, String addString){
 		beamWidth = bWidth;
 		alignQueue = new PriorityQueue<alignedStrings>(beamWidth + 1, comparator);
-		getSequences("./src/Inputs/sequences.fa");
-		getML("./src/Inputs/motiflength.txt"); 
-		for(int i=0;i<sequenceList.size();i++){
+		getSequences("./src/Inputs/"+addString+"sequences.fa");
+		getML("./src/Inputs/"+addString+"motiflength.txt"); 
+		for(int i=0;i<beamWidth;i++){
 			profileArrs.add(new int[motifLength][4]);
 			sitesArrs.add(new int[sequenceList.size()]);
 		}
@@ -35,8 +35,8 @@ public class section2_methods {
 		
 		int best = getBestProfile();
 		
-		writeMotif("./src/Outputs/predictedmotif.txt",best);
-		writeSitesList("./src/Outputs/predictedsites.txt",best);
+		writeMotif("./src/Outputs/"+addString+"predictedmotif.txt",best);
+		writeSitesList("./src/Outputs/"+addString+"predictedsites.txt",best);
 	}
 	
 	/**
