@@ -1,2 +1,0 @@
->D:\motiflength.txt
-12

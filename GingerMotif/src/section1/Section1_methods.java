@@ -43,7 +43,6 @@ public class Section1_methods {
 			sequenceList.get(x)[i]=bindingSites.get(x)[bs];
 			++bs;
 		}
-		System.out.println(new String(bindingSites.get(x)));
 	}
 	
 	private char[] genSites(int sc, int ml, int nm){
