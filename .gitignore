@@ -7,6 +7,8 @@ GingerMotif/tmp/**
 *.bak
 *.swp
 *~.nib
+*.fa
+*.txt
 local.properties
 .classpath
 .settings/
