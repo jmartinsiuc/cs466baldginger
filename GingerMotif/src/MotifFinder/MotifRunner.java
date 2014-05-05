@@ -111,15 +111,13 @@ public class MotifRunner {
 	private static double genRelativeEntropy(ArrayList<double[]> PWM) {
 		int sum=0;
 		double pTot;
-		double maxval;
 		for(int i=0; i<PWM.size(); i++){
 			pTot = PWM.get(i)[0] + PWM.get(i)[1] + PWM.get(i)[2] + PWM.get(i)[3];
-			maxval = Math.max(PWM.get(i)[0], Math.max(PWM.get(i)[1], Math.max(PWM.get(i)[2], PWM.get(i)[3])));
 			for(int j=0; j<4; j++){
 				sum += (PWM.get(i)[j]/pTot)*Math.log((PWM.get(i)[j]/pTot)/(1/4));
 			}
 		}
-		return 0;
+		return sum;
 	}
 	
 
