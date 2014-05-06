@@ -37,7 +37,7 @@ public class MotifRunner {
 					for(int l=0; l<rangeBW.length; l++){
 						addString = "BW_"+ rangeBW[l]+"_NM_" + rangeNM[i]+
 										"_ML_"+rangeML[j]+"_SC_"+rangeSC[k]+"_";
-						System.out.println("round: " +addString);
+						//System.out.println("round: " +addString);
 						startTime = System.nanoTime();
 						s = new Section1_methods(rangeML[j],rangeNM[i],500,rangeSC[k],addString);
 						s2 = new section2_methods(rangeBW[l],addString);
@@ -58,7 +58,7 @@ public class MotifRunner {
 		try {
 			pw = new PrintWriter(fn);
 			pw.println(">"+fn);
-			pw.println("\tNM\tML\tSC\tBW\trOEntropy\trPEntropy\tpercentmatch\toffByOne\truntime");
+			pw.println("NM\tML\tSC\tBW\trOE\trPE\t%mch\toB1\truntime");
 			double[] temp;
 			for(int i=0;i<benchmarkArr.size();i++){
 				temp = benchmarkArr.get(i);
@@ -81,7 +81,7 @@ public class MotifRunner {
 		double rPEntropy= genRelativeEntropy(P_PWM);
 		double percentSiteMatch = sites_matching();
 		double offByOne = isNumOff(wildNum);
-		double[] temp = {(double)NM,(double)ML,(double)SC,(double)BW,rOEntropy,rPEntropy,percentSiteMatch, offByOne, runtime};
+		double[] temp = {(double)NM,(double)ML,(double)SC,(double)BW,rOEntropy,rPEntropy,(double)percentSiteMatch, offByOne, runtime};
 		benchmarkArr.add(temp);
 		sites.clear();
 		pSites.clear();
@@ -90,9 +90,9 @@ public class MotifRunner {
 	}
 
 	private static double isNumOff(int num) {
-		int numSame=0;
+		double numSame=0;
 		for(int i=0; i<pSites.size(); i++){
-			if((pSites.get(i)+ num) == sites.get(i)) numSame++;
+			if((int)((int)pSites.get(i)+ num) == (int)sites.get(i)) numSame++;
 		}
 		if(numSame == 0 && num>1) return isNumOff(num-1);
 		if(numSame/pSites.size()>.25) return 1;
@@ -100,39 +100,30 @@ public class MotifRunner {
 	}
 
 	private static double sites_matching() {
-		int numSame=0;
+		double numSame=0;
 		for(int i=0; i<pSites.size(); i++){
-			if(pSites.get(i) == sites.get(i)) numSame++;
+			if((int)pSites.get(i) == (int)sites.get(i)) numSame++;
 		}
-		return numSame/pSites.size();
+		return (double)numSame/(double)pSites.size();
 	}
 
 	//TODO:  this function is probably wrong, relative entropy is calculated per letter?
 	private static double genRelativeEntropy(ArrayList<double[]> PWM) {
-		int sum=0;
+		double sum=0;
 		double pTot;
 		for(int i=0; i<PWM.size(); i++){
 			pTot = PWM.get(i)[0] + PWM.get(i)[1] + PWM.get(i)[2] + PWM.get(i)[3];
 			for(int j=0; j<4; j++){
-				sum += (PWM.get(i)[j]/pTot)*Math.log((PWM.get(i)[j]/pTot)/(1/4));
+				if(PWM.get(i)[j]!=0){
+					sum += (PWM.get(i)[j]/pTot) * 
+							Math.log((PWM.get(i)[j]/pTot)/(.25));
+				}
 			}
 		}
 		return sum;
 	}
 	
 
-
-	private static double getI(char c) {
-		switch(c){
-			case 'A': case 'C': case 'G': case 'T': return 1;
-			default: return 1/4;
-		}
-	}
-	
-	private static double getIN(int[] m){
-		double sum = m[0] + m[1] + m[2] +m[3];
-		return (m[0]*m[0] + m[1]*m[1] + m[2]*m[2] + m[3]*m[3])/(sum*sum);
-	}
 
 	private static int getMotifs(String addString) {
 		BufferedReader br = null;

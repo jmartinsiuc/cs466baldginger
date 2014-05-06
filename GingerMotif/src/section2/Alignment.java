@@ -53,7 +53,8 @@ public class Alignment {
 		//modified algorithm that just takes the diagonal, since that's all we're checking for a give i,j
 		
 		for(int i=1; i<=size; i++){
-			diag+=getWeight(string1[x + i-1]+""+string2[y + i-1]);
+			if(string1[x + i-1] == string2[y + i-1]) diag++;
+			//diag+=getWeight(string1[x + i-1]+""+string2[y + i-1]);
 		}
 		/*
 		//now we can run the algorithm
