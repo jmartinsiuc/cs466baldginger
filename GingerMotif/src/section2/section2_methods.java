@@ -11,7 +11,6 @@ import section2.Alignment;
 
 
 public class section2_methods {
-	int beamWidth = 20;
 	ArrayList<char[]> sequenceList = new ArrayList<char[]>();
 	Comparator<alignedStrings> comparator = new matchComparator();
     PriorityQueue<alignedStrings> alignQueue;
@@ -19,6 +18,7 @@ public class section2_methods {
 	ArrayList<int[][]> profileArrs = new ArrayList<int[][]>();
 	ArrayList<alignedStrings> aList = new ArrayList<alignedStrings>();
 	int motifLength;
+	int beamWidth = 30;
 
 
 	public section2_methods(int bWidth, String addString){
@@ -41,7 +41,7 @@ public class section2_methods {
 	
 	/**
 	 * This function generates a list of the best aligned strings of 
-	 * 		motiflength in the given two sequences, in order of score
+	 * 		motif length in the given two sequences, in order of score
 	 * @param cs - the first string
 	 * @param cs2 - the second string
 	 */
@@ -56,10 +56,6 @@ public class section2_methods {
 		}
 		for(int i=0;i<beamWidth;i++){
 			aList.add(alignQueue.poll());
-			/*System.out.println("at index " + i+ ":");
-			System.out.println("aloc:" + aList.get(i).aloc);
-			System.out.println("bloc:" + aList.get(i).bloc);
-			System.out.println("score:" + aList.get(i).matchValue);*/
 		}
 	}
 	
